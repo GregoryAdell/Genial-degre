@@ -7,7 +7,6 @@ public class MyThread extends Thread {
     private String message;
     private String serverAddress;
     private int serverPort;
- 2
     public MyThread(String message, String serverAddress, int serverPort) {
         this.message = message;
         this.serverAddress = serverAddress;
