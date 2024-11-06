@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Ombre de fond -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#D3D3D3"/> <!-- Couleur de l'ombre -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Contour arrondi de l'élément -->
+    <item android:top="4dp" android:left="4dp" android:right="4dp" android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF"/> <!-- Couleur de fond principale de l'élément -->
+            <corners android:radius="12dp"/>
+            <stroke android:width="1dp" android:color="#CCCCCC"/> <!-- Bordure légère -->
+        </shape>
+    </item>
+</layer-list>
