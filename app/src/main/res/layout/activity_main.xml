@@ -19,19 +19,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"/>
 
+    <!-- Liste de gauche -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.88"
+        android:layout_marginTop="20px"
         app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintBottom_toTopOf="@id/bouton"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerView_right"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintWidth_percent="0.35" /> <!-- 35% de la largeur de l'écran -->
+
+    <!-- Liste de droite -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20px"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintBottom_toTopOf="@id/bouton"
+        app:layout_constraintStart_toEndOf="@id/recyclerView_left"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="8dp"/>
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintWidth_percent="0.20"/> <!-- 20% de la largeur de l'écran -->
 
     <Button
         android:id="@+id/bouton"

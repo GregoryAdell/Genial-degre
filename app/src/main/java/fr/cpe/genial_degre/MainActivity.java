@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -22,10 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Changer la couleur de la barre de navigation et de la barre d'état
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre de navigation
-            getWindow().setStatusBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre d'état
-        }
+        getWindow().setNavigationBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre de navigation
+        getWindow().setStatusBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre d'état
 
         Button bt = findViewById(R.id.bouton);
         bt.setOnClickListener(new View.OnClickListener() {
@@ -36,21 +36,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        List<String> items = new ArrayList<>();
-        Collections.addAll(items, "Lux", "Infra Rouge", "UV", "Temp", "Humidité", "Pression");
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        Adapter adapter = new Adapter(items);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        RecyclerView recyclerViewLeft = findViewById(R.id.recyclerView_left);
+        RecyclerView recyclerViewRight = findViewById(R.id.recyclerView_right);
+
+        // Configuration de la liste déplaçable
+        List<String> leftItems = new ArrayList<>();
+        Collections.addAll(leftItems, "Lux", "Infra Rouge", "UV", "Temp", "Humidité", "Pression");
+        Adapter adapterLeft = new Adapter(leftItems); // Utiliser un adaptateur avec drag-and-drop
+        recyclerViewLeft.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewLeft.setAdapter(adapterLeft);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
-                Collections.swap(items, fromPosition, toPosition);
-                adapter.notifyItemMoved(fromPosition, toPosition);
+                Collections.swap(leftItems, fromPosition, toPosition);
+                adapterLeft.notifyItemMoved(fromPosition, toPosition);
                 return true;
             }
 
@@ -60,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(recyclerViewLeft);
+
+        // Configuration de la liste fixe
+        List<String> rightItems = new ArrayList<>();
+        Collections.addAll(rightItems, "V1", "V2", "V3", "V4", "V5", "V6");
+        Adapter adapterRight = new Adapter(rightItems); // Utiliser un adaptateur sans drag-and-drop
+        recyclerViewRight.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRight.setAdapter(adapterRight);
     }
 }
