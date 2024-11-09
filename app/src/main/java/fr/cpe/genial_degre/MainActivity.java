@@ -27,14 +27,23 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setNavigationBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre de navigation
         getWindow().setStatusBarColor(Color.parseColor("#fcefdd")); // Couleur de la barre d'état
 
-        Button bt = findViewById(R.id.bouton);
-        bt.setOnClickListener(new View.OnClickListener() {
+        Button bouton_Serv = findViewById(R.id.bouton_Serv);
+        bouton_Serv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ServeurConfigurationActivity.class);
                 startActivity(intent);
             }
         });
+
+        Button boutonInfo = findViewById(R.id.bouton_Info);
+        boutonInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Action à réaliser lors du clic sur le bouton
+            }
+        });
+
 
 
         RecyclerView recyclerViewLeft = findViewById(R.id.recyclerView_left);
