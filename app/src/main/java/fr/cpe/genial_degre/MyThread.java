@@ -35,7 +35,7 @@ public class MyThread extends Thread {
             inetAddress = InetAddress.getByName(serverAddress);
             socket = new DatagramSocket();
 
-            listener.onEventInMyThread("Connected to server.");
+            listener.onEventInMyThread("Connecté au serveur.");
 
             byte[] buffer = new byte[1024];
             while (running) {
@@ -46,14 +46,15 @@ public class MyThread extends Thread {
                     byte[] messageBytes = messageToSend.getBytes();
                     DatagramPacket sendPacket = new DatagramPacket(messageBytes, messageBytes.length, inetAddress, serverPort);
                     socket.send(sendPacket);
-                    listener.onEventInMyThread("Message sent: " + messageToSend);
+                    listener.onEventInMyThread("Message envoyé : " + messageToSend);
 
                     DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+                    listener.onEventInMyThread("[Reception en attente...].");
                     socket.receive(receivePacket); // Bloque jusqu'à la réception d'un message
-                    listener.onEventInMyThread("PROUUUUUUUUUUT.");
+                    listener.onEventInMyThread("[MESSAGE RECU].");
 
                     String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                    listener.onEventInMyThread("Received from server: " + receivedMessage);
+                    listener.onEventInMyThread("Message reçu du serveur : " + receivedMessage);
                 }
 
                 // 2. Écoute pour les réponses du serveur

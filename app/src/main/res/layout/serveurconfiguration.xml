@@ -10,7 +10,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Page de configuration du serveur!"
+        android:text="Configuration du serveur"
+        android:fontFamily="sans-serif-black"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -28,15 +30,20 @@
         app:layout_constraintVertical_bias="0.5">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewIP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choix du serveur" />
+            android:text=""
+            android:textSize="15dp"
+            android:layout_marginLeft="7dp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textViewPort"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15dp"
+            android:layout_marginLeft="7dp" />
 
         <EditText
             android:id="@+id/txt_ip"
@@ -44,22 +51,18 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="IP : XXX.XXX.XXX.XXX"
-            android:inputType="text"
-            android:text="Name" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Port : XXX" />
+            android:inputType="number|text"
+            app:layout_constraintStart_toStartOf="@+id/textViewPort"
+            android:layout_marginLeft="7dp" />
 
         <EditText
             android:id="@+id/txt_port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="XXXXX"
-            android:inputType="number" />
+            android:hint="Port : XXXXX"
+            android:inputType="number"
+            android:layout_marginLeft="7dp" />
 
         <Button
             android:id="@+id/bt_validate_serveur"

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,12 @@ public class MainActivity extends AppCompatActivity implements MyThreadEventList
 
     private MyThread myThread;
 
+    // Variables pour les valeurs des mesures avec des valeurs par défaut
+    private String Temp = "22°C"; // Température par défaut
+    private String Lx = "300 lx"; // Luminosité par défaut
+    private String Hum = "45%"; // Humidité par défaut
+    private String Press = "1013 hPa"; // Pression par défaut
+
     private void saveListOrder(List<String> list) {
         SharedPreferences prefs = getSharedPreferences("list_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -40,12 +47,38 @@ public class MainActivity extends AppCompatActivity implements MyThreadEventList
         String json = prefs.getString("list_order", null);
 
         if (json != null) {
-            return gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
+            return gson.fromJson(json, new TypeToken<List<String>>() {
+            }.getType());
         } else {
             List<String> defaultList = new ArrayList<>();
-            Collections.addAll(defaultList, "Lux", "Infra Rouge", "UV", "Temp", "Humidité", "Pression");
+            Collections.addAll(defaultList, "Lux", "Température", "Humidité", "Pression");
+            saveListOrder(defaultList);
             return defaultList;
         }
+    }
+
+    private List<String> getRightItems(List<String> leftItems) {
+        List<String> rightItems = new ArrayList<>();
+        for (String item : leftItems) {
+            switch (item) {
+                case "Température":
+                    rightItems.add(Temp);
+                    break;
+                case "Lux":
+                    rightItems.add(Lx);
+                    break;
+                case "Humidité":
+                    rightItems.add(Hum);
+                    break;
+                case "Pression":
+                    rightItems.add(Press);
+                    break;
+                default:
+                    rightItems.add("N/A");
+                    break;
+            }
+        }
+        return rightItems;
     }
 
     @Override
@@ -69,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements MyThreadEventList
         myThread = new MyThread(ServeurConfigurationActivity.IP, ServeurConfigurationActivity.PORT, this);
         myThread.start();
 
-        // Changer la couleur de la barre de navigation et de la barre d'état
         getWindow().setNavigationBarColor(Color.parseColor("#fcefdd"));
         getWindow().setStatusBarColor(Color.parseColor("#fcefdd"));
 
@@ -85,20 +117,28 @@ public class MainActivity extends AppCompatActivity implements MyThreadEventList
         RecyclerView recyclerViewLeft = findViewById(R.id.recyclerView_left);
         RecyclerView recyclerViewRight = findViewById(R.id.recyclerView_right);
 
-        // Charger l'ordre sauvegardé ou utiliser l'ordre par défaut
         List<String> leftItems = loadListOrder();
+        List<String> rightItems = getRightItems(leftItems); // Obtenir les valeurs correspondantes
 
-        Adapter adapterLeft = new Adapter(leftItems); // Utiliser un adaptateur avec drag-and-drop
+        Adapter adapterLeft = new Adapter(leftItems);
+        Adapter adapterRight = new Adapter(rightItems);
         recyclerViewLeft.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewLeft.setAdapter(adapterLeft);
+        recyclerViewRight.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRight.setAdapter(adapterRight);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
+
+                // Swap items in both lists to keep the order synchronized
                 Collections.swap(leftItems, fromPosition, toPosition);
+                Collections.swap(rightItems, fromPosition, toPosition);
+
                 adapterLeft.notifyItemMoved(fromPosition, toPosition);
+                adapterRight.notifyItemMoved(fromPosition, toPosition);
                 saveListOrder(leftItems);
                 return true;
             }
@@ -108,14 +148,11 @@ public class MainActivity extends AppCompatActivity implements MyThreadEventList
                 // Non utilisé
             }
         });
-
         itemTouchHelper.attachToRecyclerView(recyclerViewLeft);
 
-        // Configuration de la liste fixe
-        List<String> rightItems = new ArrayList<>();
-        Collections.addAll(rightItems, "V1", "V2", "V3", "V4", "V5", "V6");
-        Adapter adapterRight = new Adapter(rightItems);
-        recyclerViewRight.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewRight.setAdapter(adapterRight);
+        TextView infoServIP = findViewById(R.id.InfoServIP);
+        TextView infoServPort = findViewById(R.id.InfoServPort);
+        infoServIP.setText("- IP : " + ServeurConfigurationActivity.IP);
+        infoServPort.setText("- Port : " + ServeurConfigurationActivity.PORT);
     }
 }
